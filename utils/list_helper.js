@@ -12,6 +12,32 @@ const totalLikes = (blogs) => {
   return blogs.reduce(reducer, 0)
 }
 
+const mostLikes = (blogs) => {
+  if (blogs.length === 0) return "none"
+
+  let blogLikes = []
+  const authors = lodash.uniqBy(blogs, "author")
+  authors.forEach(author => {
+    let likes = 0
+    blogs.forEach(blog => {
+      if (blog.author === author.author) {
+        likes += blog.likes
+      }
+    })
+    blogLikes.push({
+      author: author.author,
+      likes: likes
+    })
+  })
+  let winner = { likes: 0 }
+  blogLikes.forEach(entry => {
+    if (entry.likes > winner.likes) {
+      winner = entry
+    }
+  })
+  return winner
+}
+
 const favouriteBlog = (blogs) => {
   let faveBlog = { likes: 0 }
   blogs.map(blog => {
@@ -48,5 +74,6 @@ module.exports = {
   dummy,
   totalLikes,
   favouriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 }
