@@ -16,6 +16,11 @@ beforeEach(async () => {
   await blogObject.save()
 })
 
+const getAll = () => {
+  const response = api.get("/api/blogs")
+  return response
+}
+
 test("blogs returned as json", async () => {
   await api
     .get("/api/blogs")
@@ -24,15 +29,22 @@ test("blogs returned as json", async () => {
 })
 
 test("all blogs fetched from server", async () => {
-  const response = await api.get("/api/blogs")
+  const response = await getAll()
   expect(response.body).toHaveLength(helper.initialBlogs.length)
 })
 
 test("a specific blog is returned", async () => {
-  const response = await api.get("/api/blogs")
+  const response = await getAll()
   const titles = response.body.map(b => b.title)
 
   expect(titles).toContain("Test Blogging: An exercise in humility")
+})
+
+test("id variable named without underscore", async () => {
+  const response = await getAll()
+  response.body.map(b => {
+    expect(b.id).toBeDefined()
+  })
 })
 
 afterAll(() => {
