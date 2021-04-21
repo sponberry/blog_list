@@ -2,8 +2,8 @@ POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
-  "title": "Blogs 2: Blog Harder",
+  "title": "Test Blogging: An exercise in humility",
   "author": "Abi N",
   "url": "https://abigail-illustration.com",
-  "likes": 5
+  "likes": 4
 }
