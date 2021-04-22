@@ -142,6 +142,46 @@ describe("when deleting a note", () => {
   })
 })
 
+test("likes value changes with put request on existing post", async () => {
+  const blogsAtStart = await helper.blogsDb()
+  const updatedBlogLikes = { likes: 20 }
+  const blogToUpdate = blogsAtStart[0]
+
+  await api
+    .put(`/api/blogs/${blogToUpdate.id}`)
+    .send(updatedBlogLikes)
+    .expect(200)
+    .expect("Content-Type", /application\/json/)
+
+  const updatedBlog = await api
+    .get(`/api/blogs/${blogToUpdate.id}`)
+    .expect(200)
+  expect(updatedBlog.body.likes).toBe(20)
+})
+
+describe("when fetching a specific blog", () => {
+
+  test("valid id returns the correct blog", async () => {
+    const blogsAtStart = await helper.blogsDb()
+    const desiredBlog = blogsAtStart[1]
+    const result = await api
+      .get(`/api/blogs/${desiredBlog.id}`)
+      .expect(200)
+      .expect("Content-Type", /application\/json/)
+
+    expect(result.body.title).toBe(desiredBlog.title)
+    expect(result.body.author).toBe(desiredBlog.author)
+  })
+
+  test("invalid id returns 404", async () => {
+    const invalidId = await helper.nonExistingId()
+    const response = await api
+      .get(`/api/blogs/${invalidId}`)
+      .expect(404)
+    console.log(response.body)
+  })
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
