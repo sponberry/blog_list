@@ -47,6 +47,26 @@ test("id variable named without underscore", async () => {
   })
 })
 
+test("valid blog added with post request", async () => {
+  const newBlog = {
+    title: "Hiking for Beginners",
+    author: "Glenn C",
+    url: "http://www.canyonsandstuff.com",
+    likes: 14,
+  }
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/)
+
+  const response = await getAll()
+  const titles = response.body.map(r => r.title)
+
+  expect(response.body).toHaveLength(helper.initialBlogs.length + 1)
+  expect(titles).toContain("Hiking for Beginners")
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
