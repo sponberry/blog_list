@@ -85,6 +85,31 @@ test("likes defaults to 0 if not entered", async () => {
   })
 })
 
+describe("Status 400 given for invalid blog on post request", () => {
+  test("Bad request for missing title", async () => {
+    const invalidBlog = {
+      author: "Andy J",
+      url: "http://www.blogs.com",
+      likes: 3
+    }
+    await api
+      .post("/api/blogs")
+      .send(invalidBlog)
+      .expect(400)
+  })
+  test("Bad request for missing url", async () => {
+    const invalidBlog = {
+      title: "Some Days Are Just a Write-Off",
+      author: "Andy J",
+      likes: 2
+    }
+    await api
+      .post("/api/blogs")
+      .send(invalidBlog)
+      .expect(400)
+  })
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
