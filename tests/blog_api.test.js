@@ -67,6 +67,24 @@ test("valid blog added with post request", async () => {
   expect(titles).toContain("Hiking for Beginners")
 })
 
+test("likes defaults to 0 if not entered", async () => {
+  const newBlog = {
+    title: "Ways to Tidy Your Flat",
+    author: "Marie K",
+    url: "http://www.tidytidytidy.com",
+  }
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/)
+
+  const response = await getAll()
+  response.body.map(r => {
+    expect(r.likes).toBeGreaterThanOrEqual(0)
+  })
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
