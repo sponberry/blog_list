@@ -52,7 +52,7 @@ describe("when creating a new blog post request", () => {
     })
   })
 
-  test("valid blog added with post request", async () => {
+  test("valid blog data added", async () => {
     const newBlog = {
       title: "Hiking for Beginners",
       author: "Glenn C",

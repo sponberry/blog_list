@@ -55,9 +55,8 @@ const favouriteBlog = (blogs) => {
 }
 
 const mostBlogs = (blogs) => {
-  let blogAuthors = []
   if (blogs.length !== 0) {
-    blogs.map(blog => blogAuthors.push(blog.author))
+    const blogAuthors = blogs.map(b => b.author)
     const countedBlogs = lodash.countBy(blogAuthors)
     const sortedBlogs = lodash(countedBlogs)
       .toPairs()
