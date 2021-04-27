@@ -2,8 +2,9 @@ POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
-  "title": "Test Blogging: An exercise in humility",
-  "author": "Abi N",
-  "url": "https://abigail-illustration.com",
-  "likes": 4
+  "title": "An assortment of the hottest purses",
+  "author": "Jennifer",
+  "url": "https://bags.com",
+  "likes": 4,
+  "userId": "6087b487a18f1d07bfc1463d"
 }
