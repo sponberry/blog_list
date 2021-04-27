@@ -4,10 +4,14 @@ const bcrypt = require("bcrypt")
 
 usersRouter.post("/", async (request, response) => {
   const body = request.body
-
-  if (body.password.length < 8) {
+  if (!body.password) {
     return response.status(401).json({
-      error: "Password must be at least 8 characters"
+      error: "You must set a password"
+    })
+  }
+  if (body.password.length < 3) {
+    return response.status(401).json({
+      error: "Password must be at least 3 characters"
     })
   }
   const passwordHash = await bcrypt.hash(body.password, 10)
@@ -21,8 +25,6 @@ usersRouter.post("/", async (request, response) => {
 
   const savedUser = await user.save()
 
-
-  console.log("response", response.status)
   response.json(savedUser)
 })
 
