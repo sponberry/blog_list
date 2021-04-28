@@ -25,8 +25,18 @@ const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: "404: blog id not found" })
 }
 
+const tokenExtractor = (request, response, next) => {
+  const authorization = request.get("authorization")
+  request.token = authorization && authorization.toLowerCase().startsWith("bearer ")
+    ? authorization.substring(7)
+    : null
+
+  next()
+}
+
 module.exports = {
   requestLogger,
   errorHandler,
-  unknownEndpoint
+  unknownEndpoint,
+  tokenExtractor
 }

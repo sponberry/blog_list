@@ -1,10 +1,10 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imxhc3RpbmdpbXByZXNzaW9uIiwiaWQiOiI2MDg3YjQ4N2ExOGYxZDA3YmZjMTQ2M2QiLCJpYXQiOjE2MTk1OTIwMTZ9.xB3W1maWviYKqtWzFpoRMgHCHUMhVmYm3DyiP_VGKsM
 
 {
-  "title": "An assortment of the hottest purses",
-  "author": "Jennifer",
-  "url": "https://bags.com",
-  "likes": 4,
-  "userId": "6087b487a18f1d07bfc1463d"
+  "title": "Top 10 Breakup Songs",
+  "author": "Billie M",
+  "url": "https://music-opinions.co.uk",
+  "likes": 15
 }
