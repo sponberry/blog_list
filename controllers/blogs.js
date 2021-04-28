@@ -3,15 +3,6 @@ const Blog = require("../models/blog")
 const User = require("../models/user")
 const jwt = require("jsonwebtoken")
 
-// const getTokenFrom = request => {
-//   const authorization = request.get("authorization")
-//   if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
-//     return authorization.substring(7)
-//   } else {
-//     return null
-//   }
-// }
-
 blogRouter.get("/", async (request, response) => {
   const blogs = await Blog
     .find({})
@@ -55,7 +46,15 @@ blogRouter.post("/", async (request, response) => {
 })
 
 blogRouter.delete("/:id", async (request, response) => {
-  await Blog.findByIdAndRemove(request.params.id)
+  const blog = await Blog.findById(request.params.id)
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  if (blog.user.toString() === decodedToken.id.toString()) {
+    await Blog.deleteOne({ _id: blog.id })
+  } else {
+    return response.status(401).json({
+      error: "user id does not match blog author id"
+    })
+  }
   response.status(204).end()
 })
 
