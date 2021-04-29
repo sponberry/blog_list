@@ -6,10 +6,10 @@ const usersDb = async () => {
   return users.map(user => user.toJSON())
 }
 
-// const returnUserIds = (async () => {
-//   const allUsers = await usersDb()
-//   return allUsers.map(u => u.id)
-// })
+const returnUserIds = (async () => {
+  const allUsers = await usersDb()
+  return allUsers.map(u => u.id)
+})
 
 const initialBlogs = [
   {
@@ -18,7 +18,6 @@ const initialBlogs = [
     "url": "https://abigail-illustration.com",
     "likes": 4,
     __v: 0,
-    "user": "6087b117d92f5b06fa598fa0"
   },
   {
     "title": "How to Listen to Lo-Fi Without it Affecting Your Algorithm",
@@ -26,7 +25,7 @@ const initialBlogs = [
     "url": "https://www.fakewebsite.com",
     "likes": 20,
     __v: 0,
-    "user": "6087b117d92f5b06fa598fa0"
+    // "user": "6087b117d92f5b06fa598fa0"
   },
   {
     "title": "Private Blogs: When a Tree Falls and No-one Hears It",
@@ -34,7 +33,7 @@ const initialBlogs = [
     "url": "https://www.fakewebsite.com",
     "likes": 8,
     __v: 0,
-    "user": "608a823e803b3875b23ad5ae"
+    // "user": "608a823e803b3875b23ad5ae"
   },
 ]
 const blogsDb = async () => {
@@ -54,7 +53,6 @@ const nonExistingId = async () => {
 }
 
 const getToken = (async (api) => {
-  "pass a valid supertest router in, eg as a variable called api"
   const userToLogin = {
     "username": "root",
     "password": "sekret"
@@ -71,5 +69,6 @@ module.exports = {
   blogsDb,
   nonExistingId,
   usersDb,
-  getToken
+  getToken,
+  returnUserIds
 }

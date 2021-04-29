@@ -9,12 +9,17 @@ const api = supertest(app)
 beforeEach(async () => {
   await Blog.deleteMany({})
 
+  const userIds = await helper.returnUserIds()
+
+  helper.initialBlogs[0].user = userIds[0]
   let blogObject = new Blog(helper.initialBlogs[0])
   await blogObject.save()
 
+  helper.initialBlogs[1].user = userIds[0]
   blogObject = new Blog(helper.initialBlogs[1])
   await blogObject.save()
 
+  helper.initialBlogs[2].user = userIds[1]
   blogObject = new Blog(helper.initialBlogs[2])
   await blogObject.save()
 })
