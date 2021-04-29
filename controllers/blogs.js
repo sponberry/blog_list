@@ -46,7 +46,11 @@ blogRouter.post("/", async (request, response) => {
 
 blogRouter.delete("/:id", async (request, response) => {
   const blog = await Blog.findById(request.params.id)
-  if (blog.user.toString() === request.user.id.toString()) {
+  if (!blog || !request.user) {
+    return response.status(401).json({
+      error: "missing blog post or user id invalid"
+    })
+  } else if (blog.user.toString() === request.user.id.toString()) {
     await Blog.deleteOne({ _id: blog.id })
   } else {
     return response.status(401).json({

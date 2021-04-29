@@ -14,6 +14,9 @@ beforeEach(async () => {
 
   blogObject = new Blog(helper.initialBlogs[1])
   await blogObject.save()
+
+  blogObject = new Blog(helper.initialBlogs[2])
+  await blogObject.save()
 })
 
 const getAll = () => {
@@ -59,8 +62,10 @@ describe("when creating a new blog post request", () => {
       url: "http://www.canyonsandstuff.com",
       likes: 14,
     }
+    const token = await helper.getToken(api)
     await api
       .post("/api/blogs")
+      .set({ "Authorization": token })
       .send(newBlog)
       .expect(201)
       .expect("Content-Type", /application\/json/)
@@ -78,8 +83,10 @@ describe("when creating a new blog post request", () => {
       author: "Marie K",
       url: "http://www.tidytidytidy.com",
     }
+    const token = await helper.getToken(api)
     await api
       .post("/api/blogs")
+      .set({ "Authorization": token })
       .send(newBlog)
       .expect(201)
       .expect("Content-Type", /application\/json/)
@@ -96,8 +103,10 @@ describe("when creating a new blog post request", () => {
       url: "http://www.blogs.com",
       likes: 3
     }
+    const token = await helper.getToken(api)
     await api
       .post("/api/blogs")
+      .set({ "Authorization": token })
       .send(invalidBlog)
       .expect(400)
   })
@@ -107,20 +116,24 @@ describe("when creating a new blog post request", () => {
       author: "Andy J",
       likes: 2
     }
+    const token = await helper.getToken(api)
     await api
       .post("/api/blogs")
+      .set({ "Authorization": token })
       .send(invalidBlog)
       .expect(400)
   })
 })
 
-describe("when deleting a note", () => {
+describe("when deleting a blog with valid token", () => {
 
   test("204 status and less blogs returned", async () => {
     const blogsAtStart = await helper.blogsDb()
     const blogToDelete = blogsAtStart[0]
+    const token = await helper.getToken(api)
     await api
       .delete(`/api/blogs/${blogToDelete.id}`)
+      .set({ "Authorization": token })
       .expect(204)
 
     const blogsAtEnd = await helper.blogsDb()
@@ -131,14 +144,38 @@ describe("when deleting a note", () => {
 
   test("the blog title is no longer present", async () => {
     const blogsAtStart = await helper.blogsDb()
-    const blogToDelete = blogsAtStart[0]
+    const blogToDelete = blogsAtStart[1]
+    const token = await helper.getToken(api)
     await api
       .delete(`/api/blogs/${blogToDelete.id}`)
+      .set({ "Authorization": token })
       .expect(204)
 
     const blogsAtEnd = await helper.blogsDb()
     const titles = blogsAtEnd.map(r => r.title)
     expect(titles).not.toContain(blogToDelete.title)
+  })
+})
+
+describe("when deleting a blog without", () => {
+
+  test("any token provided fails with 401", async () => {
+    const blogsAtStart = await helper.blogsDb()
+    const blogToDelete = blogsAtStart[1]
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .set({ "Authorization": "" })
+      .expect(401)
+  })
+
+  test("matching user token fails with 401", async () => {
+    const blogsAtStart = await helper.blogsDb()
+    const blogToDelete = blogsAtStart[2]
+    const token = await helper.getToken(api)
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .set({ "Authorization": token })
+      .expect(401)
   })
 })
 
