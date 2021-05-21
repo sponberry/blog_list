@@ -25,7 +25,7 @@ blogRouter.post("/", async (request, response) => {
 
   if (!request.token || !request.user) {
     return response.status(401).json({
-      error: "token missing or invalid"
+      error: "token missing or invalid - please refresh page and login again"
     })
   }
   const user = request.user
@@ -48,7 +48,7 @@ blogRouter.delete("/:id", async (request, response) => {
   const blog = await Blog.findById(request.params.id)
   if (!blog || !request.user) {
     return response.status(401).json({
-      error: "missing blog post or user id invalid"
+      error: "missing blog post or user id invalid - please refresh and login again"
     })
   } else if (blog.user.toString() === request.user.id.toString()) {
     await Blog.deleteOne({ _id: blog.id })

@@ -24,7 +24,20 @@ loginRouter.post("/", async (request, response) => {
 
   response
     .status(200)
-    .send({ token, username: user.username, name: user.name })
+    .send({ token, username: user.username, name: user.name, id: user.id })
+})
+
+loginRouter.post("/reload", async (request, response) => {
+  const body = request.body
+  const user = await User.findOne({ username: body.username })
+
+  if (!user) {
+    return response.status(401).json({
+      error: "username or password invalid"
+    })
+  }
+
+  response.status(200).end()
 })
 
 module.exports = loginRouter
