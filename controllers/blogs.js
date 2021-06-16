@@ -44,6 +44,20 @@ blogRouter.post("/", async (request, response) => {
   response.status(201).json(savedBlog)
 })
 
+blogRouter.post("/:id/comments", async (request, response) => {
+  const blog = {
+    comments: request.body.comments
+  }
+  if (!blog) {
+    return response.status(401).json({
+      error: "missing blog post"
+    })
+  } else {
+    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new:true })
+    response.status(201).json(updatedBlog)
+  }
+})
+
 blogRouter.delete("/:id", async (request, response) => {
   const blog = await Blog.findById(request.params.id)
   if (!blog || !request.user) {
